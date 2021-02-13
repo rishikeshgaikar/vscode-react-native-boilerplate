@@ -5,10 +5,10 @@ const projectRoot = vscode.workspace.workspaceFolders[0].uri.fsPath;
 const componentsDir = `${projectRoot}/app/src/components`;
 
 const readFiles = () => {
-  var arrayFiles = fs.readdirSync(`${componentsDir}`).map(file => {
+  var arrayFiles = fs.readdirSync(`${componentsDir}`).map((file) => {
     return file.replace('.js', '');
   });
-  const Files = arrayFiles.filter(item => item !== 'index');
+  const Files = arrayFiles.filter((item) => item !== 'index');
   return Files;
 };
 
@@ -16,14 +16,14 @@ const genrateIndex = () => {
   const componentFiles = readFiles();
   if (componentFiles.length > 0) {
     const properties = componentFiles
-      .map(name => {
+      .map((name) => {
         const key = name.replace(/\s/g, '');
         let path = `${componentsDir}/${name}.js`;
         let lastIndex = -1;
         var sceneFileData = fs.readFileSync(path, 'utf-8');
 
         let dataArray = sceneFileData.toString().split('\n');
-        const searchKeyword = 'default';
+        const searchKeyword = 'export default';
 
         for (let index = 0; index < dataArray.length; index++) {
           if (dataArray[index].includes(searchKeyword)) {
@@ -38,7 +38,7 @@ const genrateIndex = () => {
         }
       })
       .join('\n');
-    const testproperties = componentFiles.map(name => {
+    const testproperties = componentFiles.map((name) => {
       const testkey = name.replace(/\s/g, '');
       return `${testkey}`;
     });
@@ -59,7 +59,7 @@ const isComponentDirectoryExists = () => {
   fs.access(
     `${componentsDir}`,
     fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK,
-    err => {
+    (err) => {
       if (err) {
         return vscode.window.showInformationMessage(
           'Directory ./app/src/components dose not exists!'

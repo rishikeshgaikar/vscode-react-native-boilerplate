@@ -5,10 +5,10 @@ const projectRoot = vscode.workspace.workspaceFolders[0].uri.fsPath;
 const scenesDir = `${projectRoot}/app/src/scenes`;
 
 const readFiles = () => {
-  var arrayFiles = fs.readdirSync(`${scenesDir}`).map(file => {
+  var arrayFiles = fs.readdirSync(`${scenesDir}`).map((file) => {
     return file.replace('.js', '');
   });
-  const Files = arrayFiles.filter(item => item !== 'index');
+  const Files = arrayFiles.filter((item) => item !== 'index');
   return Files;
 };
 
@@ -16,13 +16,13 @@ const genrateIndex = () => {
   const scenesFiles = readFiles();
   if (scenesFiles.length > 0) {
     const properties = scenesFiles
-      .map(name => {
+      .map((name) => {
         const key = name.replace(/\s/g, '');
         let path = `${scenesDir}/${name}.js`;
         let lastIndex = -1;
         var sceneFileData = fs.readFileSync(path, 'utf-8');
         let dataArray = sceneFileData.toString().split('\n');
-        const searchKeyword = 'default';
+        const searchKeyword = 'export default';
 
         for (let index = 0; index < dataArray.length; index++) {
           if (dataArray[index].includes(searchKeyword)) {
@@ -37,7 +37,7 @@ const genrateIndex = () => {
         }
       })
       .join('\n');
-    const testproperties = scenesFiles.map(name => {
+    const testproperties = scenesFiles.map((name) => {
       const testkey = name.replace(/\s/g, '');
       return `${testkey}`;
     });
@@ -58,7 +58,7 @@ const isScenesDirectoryExists = () => {
   fs.access(
     `${scenesDir}`,
     fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK,
-    err => {
+    (err) => {
       if (err) {
         return vscode.window.showInformationMessage(
           'Directory ./app/src/scenes dose not exists!'
